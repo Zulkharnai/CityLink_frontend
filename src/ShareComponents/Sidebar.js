@@ -25,11 +25,11 @@ function Sidebar({ onLogout, toggleSidebar, isSidebarOpen }) {
   const navigate = useNavigate();
 
   const logout = () => {
-    onLogout();
+    localStorage.clear();
+    navigate('/');
   }
 
   const NavigateToLink = (link) => {
-    console.log(link)
     navigate(link)
   }
 

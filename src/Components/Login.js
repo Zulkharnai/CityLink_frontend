@@ -21,7 +21,7 @@ const Login = ({onLogin}) => {
           
           ToastMsg("success", 'Login Successfully')
           localStorage.setItem("authorization", res.json.token)
-          localStorage.setItem("user", res.json.data)
+          localStorage.setItem("user", JSON.stringify(res.json.data))
           onLogin()
           navigate('/Dashboard')
 

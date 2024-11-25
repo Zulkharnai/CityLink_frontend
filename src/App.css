@@ -88,3 +88,16 @@
   display: none !important;
 }
 
+/* For the Delete & Edit  */
+.icon {
+  cursor: pointer; /* Makes the icons clickable */
+  margin-right: 10px; /* Adds space to the right of the icon */
+}
+
+.edit-icon {
+  color: blue; /* Edit icon color */
+}
+
+.delete-icon {
+  color: red; /* Delete icon color */
+}
