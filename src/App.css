@@ -1,0 +1,90 @@
+*{
+  font-family: 'Poppins,sans-serif';
+  box-sizing: 'border-box';
+  font-style: 'normal';
+}
+
+.font-serif{
+  font-family: "Playfair Display", serif;
+}
+
+/* SideBar Item */
+.sidebar-item{
+  padding: 0.8rem 0;
+  cursor: pointer;
+}
+
+.sidebar-item span{
+  margin-left: 0.5rem;
+}
+
+.sidebar-item .sidebar-sub-item {
+  padding-left: 1rem;
+  cursor: pointer;
+}
+
+.active {
+  color: black;
+  border-right: 4px solid #2507AA;
+  border-radius: 5px;
+}
+
+.sidebar-item span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.active .icon {
+  color: #2507AA; /* Icon color */
+  margin-right: 10px; /* Spacing between icon and text */
+}
+/* SideBar Item */
+
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.card{
+  width: 30%;
+}
+
+.card p {
+  margin-bottom: 0;
+}
+
+.no-border th, .no-border td {
+  border: none !important;
+}
+
+.secondary{
+  background-color: #F4F7FF;
+  height: 90vh;
+}
+
+.white{
+  background-color: #ffff;
+  border-radius: 10px;
+}
+
+.table {
+  background-color: transparent; /* Makes background transparent */
+}
+
+.table thead{
+  border-bottom: #e6e6e6e7;
+}
+
+.table th, .table td {
+  padding: 10px; /* Adjust padding */
+}
+
+.leads h4{
+  margin: 0;
+  margin-top: 1%;
+}
+
+.no-arrow-dropdown .dropdown-toggle::after {
+  display: none !important;
+}
+
