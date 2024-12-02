@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTachometerAlt, faSlidersH, faUsers, faBuilding, faCreditCard, faBox, faHandHoldingHeart, faStar, faChartBar, faCog, faSignOutAlt, faUserPlus, faUserEdit, faChevronLeft, faChevronRight, faChevronDown, faUser, faNewspaper, faListAlt, faTrophy, faCalendarAlt, faBullhorn, faBell, faFilm } from '@fortawesome/free-solid-svg-icons';
 import { Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import logo from '../images/logo.png'
 
 function Sidebar({ onLogout, toggleSidebar, isSidebarOpen }) {
 
@@ -42,8 +43,8 @@ function Sidebar({ onLogout, toggleSidebar, isSidebarOpen }) {
           isSidebarOpen ? <>
 
             {/* Logo Section */}
-            <div style={{  padding: '0.8rem', borderBottom: '2px solid ',marginBottom: '1rem' }}>
-              <h2 style={{ margin: 0, textAlign: 'center' }}>MyLogo</h2>
+            <div style={{   borderBottom: '2px solid ',marginBottom: '1rem' }}>
+              <h2 style={{ margin: 0, textAlign: 'center' }}><img src={logo} alt='LOGO'  height="65px" width="100px" /></h2>
             </div>
 
             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -95,9 +96,9 @@ function Sidebar({ onLogout, toggleSidebar, isSidebarOpen }) {
                 <FontAwesomeIcon icon={faBullhorn} className='icon' /> <span>Advertisement</span>
               </li>
 
-              <li className='sidebar-item' onClick={() => { NavigateToLink('/Notification') }}>
+              {/* <li className='sidebar-item' onClick={() => { NavigateToLink('/Notification') }}>
                 <FontAwesomeIcon icon={faBell} className='icon' /> <span>Notification</span>
-              </li>
+              </li> */}
 
               <li className='sidebar-item' onClick={toggleReportMenu} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
