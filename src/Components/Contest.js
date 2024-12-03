@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, Table } from 'react-bootstrap';
+import { Button, Form, Modal, Table, Pagination } from 'react-bootstrap';
 import { simpleGetCallWithToken, deleteWithAuthCall, PostCallWithErrorResponse } from '../api/ApiServices';
 import ApiConfig from '../api/ApiConfig';
 import ToastMsg from '../ToastMsg';
@@ -7,10 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 
 function Contest() {
-
     const [showModal, setShowModal] = useState(false);
-    const [showViewModal, setShowViewModal] = useState(false); // Modal for viewing quiz details
-    const [dataList, setDataList] = useState([]);
+    const [showViewModal, setShowViewModal] = useState(false);
+    const [dataList, setDataList] = useState([]); // Full data list
+    const [paginatedData, setPaginatedData] = useState([]); // Data for current page
     const [quizData, setQuizData] = useState({
         content_title: '',
         content_description: '',
@@ -24,11 +24,17 @@ function Contest() {
         questions: []
     });
 
-    const handleList = async () => {
-        simpleGetCallWithToken(ApiConfig.GET_CONTENT + '?category_id=' + 3)
+    const [currentPage, setCurrentPage] = useState(1); // Current page number
+    const [lastPage, setLastPage] = useState(1); // Total pages from API response
+
+    const handleList = async (page = 1) => {
+        simpleGetCallWithToken(ApiConfig.GET_CONTENT + `?category_id=3&page=${page}`)
             .then((res) => {
                 if (res.success) {
-                    setDataList(res.data);
+                    setDataList(res.data); // All the data
+                    setLastPage(res.last_page); // Total pages
+                    setPaginatedData(res.data); // Display current page data
+                    setCurrentPage(res.page); // Update current page
                 } else {
                     ToastMsg("error", res.error.message ?? res.message);
                 }
@@ -46,7 +52,7 @@ function Contest() {
                 if (res.json.success) {
                     ToastMsg("success", res.json.message);
                     handleClose();
-                    handleList();
+                    handleList(currentPage); // Reload the current page
                 } else {
                     ToastMsg("error", res.json.error.message);
                 }
@@ -71,7 +77,7 @@ function Contest() {
             .then((res) => {
                 if (res.success) {
                     ToastMsg("success", res.message);
-                    handleList();
+                    handleList(currentPage); // Reload the current page
                 } else {
                     ToastMsg("error", res.error.message ?? res.message);
                 }
@@ -82,7 +88,7 @@ function Contest() {
     };
 
     const handleView = (data) => {
-        setViewQuizData(data); // Set the selected quiz data to view
+        setViewQuizData(data);
         setShowViewModal(true); // Show the View Modal
     };
 
@@ -113,11 +119,16 @@ function Contest() {
         });
     };
 
-      // Modal handling
-      const handleShow = () => setShowModal(true)
+    const handlePaginationChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        handleList(pageNumber); // Load data for the new page
+    };
+
+    // Modal handling
+    const handleShow = () => setShowModal(true)
 
     useEffect(() => {
-        handleList();
+        handleList(currentPage);
     }, []);
 
     return (
@@ -143,10 +154,10 @@ function Contest() {
                     </tr>
                 </thead>
                 <tbody>
-                    {dataList.length ? 
-                        dataList.map((data, index) => (
+                    {paginatedData.length ? 
+                        paginatedData.map((data, index) => (
                             <tr key={data.content_id}>
-                                <td>{index + 1}</td>
+                                <td>{(currentPage - 1) * 5 + (index + 1)}</td>
                                 <td>{data.content_title}</td>
                                 <td>{data.content_description}</td>
                                 <td>
@@ -160,6 +171,19 @@ function Contest() {
                     }
                 </tbody>
             </Table>
+
+            {/* Pagination Controls */}
+            <Pagination>
+                {[...Array(lastPage)].map((_, index) => (
+                    <Pagination.Item
+                        key={index + 1}
+                        active={index + 1 === currentPage}
+                        onClick={() => handlePaginationChange(index + 1)}
+                    >
+                        {index + 1}
+                    </Pagination.Item>
+                ))}
+            </Pagination>
 
             {/* Modal for Create or Edit Quiz */}
             <Modal show={showModal} onHide={handleClose}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Modal, Table } from 'react-bootstrap';
+import { Button, Form, Modal, Pagination, Table } from 'react-bootstrap';
 import { simpleGetCallWithToken, deleteWithAuthCall, multipartPostCallWithErrorResponse } from '../api/ApiServices';
 import ApiConfig, { IMAGE_URL } from '../api/ApiConfig';
 import ToastMsg from '../ToastMsg';
@@ -19,12 +19,21 @@ function Advertisement() {
     });
     const [dataList, setDataList] = useState([]);
 
+     // Pagination states
+     const [currentPage, setCurrentPage] = useState(1);
+     const [totalPages, setTotalPages] = useState(1);
+     const [totalCount, setTotalCount] = useState(0);
+     const itemsPerPage = 10;  // Define the items per page
+
     // Fetch the list of advertisements
-    const handleList = async () => {
-        simpleGetCallWithToken(ApiConfig.GET_ADVERTISEMENT)
+    const handleList = async (page = 1, limit = itemsPerPage) => {
+        simpleGetCallWithToken(ApiConfig.GET_ADVERTISEMENT+ `?page=${page}&limit=${limit}`)
             .then((res) => {
                 if (res.success === true) {
                     setDataList(res.data);
+                    setTotalPages(res.total_pages);
+                    setTotalCount(res.total_count);
+                    setCurrentPage(page);
                 } else {
                     ToastMsg("error", res.error.message ?? res.message);
                 }
@@ -59,7 +68,7 @@ function Advertisement() {
             if (res.json.success) {
                 ToastMsg("success", res.json.message);
                 handleClose();  // Close the modal after successful submission
-                handleList();   // Refresh the list (or any action after successful submission)
+                handleList(currentPage);   // Refresh the list (or any action after successful submission)
             } else {
                 ToastMsg("error", res.json.message);
             }
@@ -86,7 +95,7 @@ function Advertisement() {
             .then((res) => {
                 if (res.success === true) {
                     ToastMsg("success", res.message);
-                    handleList(); // Refresh the list
+                    handleList(currentPage); // Refresh the list
                 } else {
                     ToastMsg("error", res.error.message ?? res.message);
                 }
@@ -94,6 +103,10 @@ function Advertisement() {
             .catch((err) => {
                 ToastMsg("error", err);
             });
+    };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
 
     // Modal handling
@@ -107,8 +120,8 @@ function Advertisement() {
     };
 
     useEffect(() => {
-        handleList();
-    }, []); // This effect runs once when the component mounts
+        handleList(currentPage);
+    }, [currentPage]); // This effect runs once when the component mounts
 
     return (
         <>
@@ -153,7 +166,7 @@ function Advertisement() {
                         {dataList && dataList.length ?
                             dataList.map((data, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{(currentPage - 1) * itemsPerPage + (index + 1)}</td>
                                     <td>{data.advertisement_title}</td>
                                     <td>{data.advertisement_description}</td>
                                     <td>{data.advertisement_client ?? '-'}</td>
@@ -171,6 +184,18 @@ function Advertisement() {
                         }
                     </tbody>
                 </Table>
+
+                <Pagination>
+                    {[...Array(totalPages).keys()].map((_, index) => (
+                        <Pagination.Item
+                            key={index + 1}
+                            active={index + 1 === currentPage}
+                            onClick={() => handlePageChange(index + 1)}
+                        >
+                            {index + 1}
+                        </Pagination.Item>
+                    ))}
+                </Pagination>
 
                 {/* Modal for Create/Update Advertisement */}
                 <Modal show={showModal} onHide={handleClose}>

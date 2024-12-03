@@ -1,13 +1,15 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Badge, Button, Col, Container, Form, FormControl, Nav, Navbar, NavDropdown, Row } from 'react-bootstrap'
-import { faBell, faEnvelope, } from '@fortawesome/free-solid-svg-icons'
+import { Badge, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom';
 
 function NavbarComponent({ onLogout }) {
 
     const logout = () => {
-        onLogout()
+        localStorage.clear();   // Clear localStorage
+        onLogout();
+        navigate('/');
     }
 
     const navigate = useNavigate();
@@ -15,6 +17,8 @@ function NavbarComponent({ onLogout }) {
         console.log(link)
         navigate(link)
       }
+
+      const user = JSON.parse(localStorage.getItem("user"));
 
     return (
         <>
@@ -45,14 +49,14 @@ function NavbarComponent({ onLogout }) {
                                                 className="rounded-circle"
                                                 style={{ width: '30px', height: '30px' }}
                                             />
-                                            <span className="ms-3">Username</span>
+                                            <span className="ms-3">{user.admin_name}</span>
                                         </div>
                                     }
                                     id="profile-dropdown"
                                     className="me-4 no-arrow-dropdown"
                                 >
-                                    <NavDropdown.Item onClick={() => {NavigateToLink('/Profile')}}>Profile</NavDropdown.Item>
-                                    <NavDropdown.Item href="#settings">Settings</NavDropdown.Item>
+                                    {/* <NavDropdown.Item onClick={() => {NavigateToLink('/Profile')}}>Profile</NavDropdown.Item> */}
+                                    {/* <NavDropdown.Item href="#settings">Settings</NavDropdown.Item> */}
                                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                                 </NavDropdown>
                             </div>

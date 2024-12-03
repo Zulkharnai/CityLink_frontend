@@ -6,7 +6,7 @@ export async function PostCallWithErrorResponse(url, requestBody) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
     },
     body: requestBody,
   })
@@ -50,7 +50,7 @@ export async function simpleGetCallWithToken(url) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
     },
   })
     .then((response) => response.text())
@@ -67,7 +67,7 @@ export async function DeleteCallWithErrorResponseWithToken(url, requestBody) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
     },
     // body: JSON.stringify({...customerData,...requestBody})
     body: requestBody,
@@ -132,7 +132,7 @@ export async function multipartPostCallWithErrorResponse(url, formData) {
       headers: {
         Accept: "application/json",
         // Authorization: localStorage.getItem("authorization"),
-        Authorization: "Bearer " + localStorage.getItem("authorization")
+        Authorization: localStorage.getItem("authorization")
       },
       body: formData,
     });
@@ -159,7 +159,7 @@ export async function getWithAuthCallWithErrorResponse(url) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
 
     },
   })
@@ -209,7 +209,7 @@ export async function postWithAuthCallWithErrorResponse(url, requestBody) {
       Accept: "application/json",
       "Content-Type": "application/json",
       // "Content-Type": "multipart/form-data",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
     },
     body: requestBody,
   })
@@ -232,7 +232,7 @@ export async function putMultipartWithAuthCallWithErrorResponse(url, formData) {
       method: "PUT",
       headers: {
         Accept: "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
+        Authorization:localStorage.getItem("authorization"),
       },
       body: formData,
     });
@@ -262,7 +262,7 @@ export async function postMultipartWithAuthCallWithErrorResponse(
       Accept: "application/json",
       // "Content-Type": "application/json",
       'Content-Type': 'multipart/form-data',
-      Authorization: "Bearer " + localStorage.getItem("Token"),
+      Authorization:localStorage.getItem("Token"),
     },
     body: requestBody,
   })
@@ -286,7 +286,7 @@ export async function simpleGetCallWithErrorResponse(url) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
     },
   })
     .then((response) => {
@@ -352,7 +352,7 @@ export async function simplePostAuthCall(url, requestBody) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
 
       // Origin: window.location.origin,
       //'Access-Control-Allow-Credentials': "*"
@@ -432,7 +432,7 @@ export async function putWithAuthCall(url, requestBody) {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
     },
     body: JSON.stringify(requestBody),
   })
@@ -463,7 +463,7 @@ export async function putMultipartWithAuthCall(url, requestBody) {
       // Accept: "application/json",
       // "Content-Type": "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("authorization"),
+      Authorization:localStorage.getItem("authorization"),
 
     },
     body: JSON.stringify(requestBody),
@@ -478,7 +478,7 @@ export async function putMultipartWithAuthCallToken(url, formData) {
       headers: {
         Accept: "application/json",
 
-        Authorization: "Bearer " + localStorage.getItem("authorization"),
+        Authorization:localStorage.getItem("authorization"),
 
       },
       body: formData

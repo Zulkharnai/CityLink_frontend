@@ -23,6 +23,7 @@ import ContestReport from './Components/ContestReport.js';
 import Notification from './Components/Notification';
 import Profile from './Components/Profile';
 import DailyNews from './Components/DailyNews.js';
+import Ticket from './Components/Ticket.js';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,6 +88,7 @@ function App() {
                 <Route path="/ShowReport" element={isAuthenticated ? <ShowReport /> : <Navigate to="/" />} />
                 <Route path="/ContestReport" element={isAuthenticated ? <ContestReport /> : <Navigate to="/" />} />
                 <Route path="/EventReport" element={isAuthenticated ? <EventReport /> : <Navigate to="/" />} />
+                <Route path="/ticket" element={isAuthenticated ? <Ticket /> : <Navigate to="/" />} />
 
               </Routes>
             </div>

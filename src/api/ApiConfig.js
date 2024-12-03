@@ -30,6 +30,12 @@ const ApiConfig = {
   DELETE_ADVERTISEMENT: BASE_URL + "delete-advertisement",
 
 
+  // TICKETS
+  GET_TICKETS: BASE_URL + "get-ticket",
+  UPDATE_TICKET: BASE_URL + "update-ticket",
+  CREATE_TICKET: BASE_URL + "add-ticket",
+  DELETE_TICKET: BASE_URL + "delete-ticket"
+
 };
 
 export default ApiConfig;

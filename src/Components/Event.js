@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Modal, Table } from 'react-bootstrap';
+import { Button, Form, Modal, Pagination, Table } from 'react-bootstrap';
 import { simpleGetCallWithToken, deleteWithAuthCall, multipartPostCallWithErrorResponse } from '../api/ApiServices';
-import ApiConfig, { IMAGE_URL } from '../api/ApiConfig';
+import ApiConfig from '../api/ApiConfig';
 import ToastMsg from '../ToastMsg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -21,12 +21,21 @@ function Event() {
     const [dataList, setDataList] = useState([]);
     const [eventList, setEventList] = useState([]);
 
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const itemsPerPage = 10;  // Define the items per page
+
     // Fetch the list of categories
-    const handleList = async () => {
-        simpleGetCallWithToken(ApiConfig.GET_CONTENT+'?category_id='+4)
+    const handleList = async (page = 1, limit = itemsPerPage) => {
+        simpleGetCallWithToken(ApiConfig.GET_CONTENT + `?category_id=4&page=${page}&limit=${limit}`)
             .then((res) => {
                 if (res.success === true) {
                     setDataList(res.data);
+                    setTotalPages(res.total_pages);
+                    setTotalCount(res.total_count);
+                    setCurrentPage(page);
                 } else {
                     ToastMsg("error", res.error.message ?? res.message);
                 }
@@ -39,16 +48,16 @@ function Event() {
     // Fetch the Event list of categories
     const handleEventList = async () => {
         simpleGetCallWithToken(ApiConfig.GET_EVENT_CATEGORY)
-        .then((res) => {
-            if (res.success === true) {
-                setEventList(res.data);
-            } else {
-            ToastMsg("error", res.error.message ?? res.message);
-            }
-        })
-        .catch((err) => {
-            ToastMsg("error", err);
-        });
+            .then((res) => {
+                if (res.success === true) {
+                    setEventList(res.data);
+                } else {
+                    ToastMsg("error", res.error.message ?? res.message);
+                }
+            })
+            .catch((err) => {
+                ToastMsg("error", err);
+            });
     };
 
     // Submit the new category
@@ -73,10 +82,10 @@ function Event() {
         if (res.json.success === true) {
             ToastMsg("success", res.json.message);
             handleClose();  // Close the modal or perform any cleanup
-            handleList();   // Refresh the list (or any action after successful submission)
-          } else {
+            handleList(currentPage);   // Refresh the list (or any action after successful submission)
+        } else {
             ToastMsg("error", res.json.message);
-          }
+        }
     };
 
     // Fetch the data for editing the category
@@ -92,7 +101,7 @@ function Event() {
             .then((res) => {
                 if (res.success === true) {
                     ToastMsg("success", res.message);
-                    handleList(); // Refresh the list
+                    handleList(currentPage); // Refresh the list
                 } else {
                     ToastMsg("error", res.error.message ?? res.message);
                 }
@@ -100,6 +109,10 @@ function Event() {
             .catch((err) => {
                 ToastMsg("error", err);
             });
+    };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
 
     // Modal handling
@@ -113,9 +126,9 @@ function Event() {
     };
 
     useEffect(() => {
-        handleList();
+        handleList(currentPage);
         handleEventList();
-    }, []); // This effect runs once when the component mounts
+    }, [currentPage]); // This effect runs once when the component mounts
 
     return (
         <>
@@ -159,7 +172,7 @@ function Event() {
                         {dataList && dataList.length ?
                             dataList.map((data, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{(currentPage - 1) * itemsPerPage + (index + 1)}</td>
                                     <td>{data.content_title}</td>
                                     <td>{data.content_description}</td>
                                     <td>{data.event_category_title ?? '-'}</td>
@@ -178,6 +191,19 @@ function Event() {
                     </tbody>
                 </Table>
 
+                {/* Pagination */}
+                <Pagination>
+                    {[...Array(totalPages).keys()].map((_, index) => (
+                        <Pagination.Item
+                            key={index + 1}
+                            active={index + 1 === currentPage}
+                            onClick={() => handlePageChange(index + 1)}
+                        >
+                            {index + 1}
+                        </Pagination.Item>
+                    ))}
+                </Pagination>
+
                 {/* Modal for Create Show Category */}
                 <Modal show={showModal} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -191,7 +217,7 @@ function Event() {
                                     type="text"
                                     placeholder="Enter Show Title"
                                     value={showData.content_title}
-                                    onChange={(e) => {setShowData({ ...showData, content_title: e.target.value }); console.log("showData ============ >>> ", showData)}}
+                                    onChange={(e) => { setShowData({ ...showData, content_title: e.target.value }); console.log("showData ============ >>> ", showData) }}
                                 />
                             </Form.Group>
 
